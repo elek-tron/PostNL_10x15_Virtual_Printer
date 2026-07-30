@@ -10,8 +10,8 @@ src/PostNL10x15.VirtualEndpoint/Worker/
 AppPackages/
 PostNL 10x15 Printer - Installatie Windows 11 v*/
 PostNL 10x15 Printer - Installatie Windows 11 v*.zip
-artwork/PostNL10x15-icon-chromakey.png
-artwork/PostNL10x15-icon-windows-sizes.png
+artwork/*-chromakey.png
+artwork/*-windows-sizes.png
 artwork/previous-placeholder-assets/
 *.user
 *.suo

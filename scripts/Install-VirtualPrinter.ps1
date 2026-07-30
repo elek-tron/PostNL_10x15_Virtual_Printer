@@ -281,9 +281,14 @@ try {
         throw "De installatie is niet voltooid.`n`n$details"
     }
 
+    $installedMessage =
+        "De printer 'PostNL 10x15' is ge" +
+        [char]0x00EF +
+        "nstalleerd.`n`nDoelprinter: $TargetPrinter"
+
     Show-Message `
         -Title "PostNL 10x15" `
-        -Text "De printer 'PostNL 10x15' is geïnstalleerd.`n`nDoelprinter: $TargetPrinter" `
+        -Text $installedMessage `
         -Icon Information
 }
 catch {
