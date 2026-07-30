@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.26100.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.26100.0</TargetPlatformVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platforms>x64</Platforms>
+    <SelfContained>false</SelfContained>
+    <PublishSelfContained>false</PublishSelfContained>
+    <RootNamespace>PostNL10x15.Worker</RootNamespace>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>PostNL10x15</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../PostNL10x15.Core/PostNL10x15.Core.csproj" />
+    <ProjectReference Include="../PostNL10x15.VirtualPrinter/PostNL10x15.VirtualPrinter.csproj" />
+    <PackageReference Include="PDFtoImage" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

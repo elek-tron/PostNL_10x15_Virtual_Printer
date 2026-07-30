@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:printsupport2="http://schemas.microsoft.com/appx/manifest/printsupport/windows10/2"
+  IgnorableNamespaces="uap printsupport2">
+  <Identity
+    Name="PostNL10x15.VirtualPrinter"
+    Publisher="CN=PostNL10x15 Development"
+    Version="0.1.0.0" />
+  <Properties>
+    <DisplayName>PostNL 10x15 Virtual Printer</DisplayName>
+    <PublisherDisplayName>PostNL 10x15</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Dependencies>
+    <TargetDeviceFamily
+      Name="Windows.Universal"
+      MinVersion="10.0.22000.0"
+      MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="nl-NL" />
+  </Resources>
+  <Applications>
+    <Application
+      Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="PostNL10x15.VirtualEndpoint.App">
+      <uap:VisualElements
+        AppListEntry="none"
+        DisplayName="PostNL 10x15"
+        Description="Snijdt PostNL-labels automatisch uit en print ze op 10x15 cm."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png" />
+      <Extensions>
+        <printsupport2:Extension
+          Category="windows.printSupportVirtualPrinterWorkflow"
+          EntryPoint="PostNL10x15.VirtualEndpoint.PrintWorkflowBackgroundTask">
+          <printsupport2:PrintSupportVirtualPrinter
+            DisplayName="PostNL 10x15"
+            PrinterUri="postnl10x15:printer"
+            PreferredInputFormat="application/oxps"
+            PdcFile="Config\POSTNL10X15_PDC.xml">
+            <printsupport2:SupportedFormats>
+              <printsupport2:SupportedFormat
+                Type="application/pdf"
+                MaxVersion="1.7" />
+            </printsupport2:SupportedFormats>
+          </printsupport2:PrintSupportVirtualPrinter>
+        </printsupport2:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+</Package>
+
