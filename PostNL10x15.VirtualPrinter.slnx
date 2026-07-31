@@ -2,5 +2,6 @@
   <Project Path="src/PostNL10x15.Core/PostNL10x15.Core.csproj" />
   <Project Path="src/PostNL10x15.VirtualPrinter/PostNL10x15.VirtualPrinter.csproj" />
   <Project Path="src/PostNL10x15.Worker/PostNL10x15.Worker.csproj" />
+  <Project Path="src/PostNL10x15.VirtualEndpoint/PostNL10x15.VirtualEndpoint.csproj" />
   <Project Path="packaging/PostNL10x15.Packaging.wapproj" />
 </Solution>

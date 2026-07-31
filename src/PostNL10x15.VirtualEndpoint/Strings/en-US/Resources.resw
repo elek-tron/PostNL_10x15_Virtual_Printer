@@ -35,7 +35,7 @@
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
               <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
@@ -63,19 +63,19 @@
     <value>PostNL 10x15</value>
   </data>
   <data name="FixedOutput.Text" xml:space="preserve">
-    <value>Vast uitvoerformaat: 10 × 15 cm</value>
+    <value>Fixed output size: 10 × 15 cm</value>
   </data>
   <data name="AutomaticOrientation.Text" xml:space="preserve">
-    <value>Stand: automatisch</value>
+    <value>Orientation: automatic</value>
   </data>
   <data name="AutomaticMargins.Text" xml:space="preserve">
-    <value>Witranden: automatisch verwijderd</value>
+    <value>White margins: removed automatically</value>
   </data>
   <data name="NoSettingsNeeded.Text" xml:space="preserve">
-    <value>Je hoeft hier niets te kiezen.</value>
+    <value>No settings are needed.</value>
   </data>
   <data name="AutomaticProcessing.Text" xml:space="preserve">
-    <value>Het verzendlabel wordt automatisch uitgesneden en passend naar de tijdens de installatie gekozen labelprinter gestuurd.</value>
+    <value>The shipping label is cropped automatically and fitted to the label printer selected during installation.</value>
   </data>
   <data name="OkButton.Content" xml:space="preserve">
     <value>OK</value>
@@ -84,12 +84,12 @@
     <value>PostNL 10x15</value>
   </data>
   <data name="MainDescription.Text" xml:space="preserve">
-    <value>Deze Windows-printer snijdt PostNL-labels automatisch uit en stuurt ze naar de ingestelde doelprinter.</value>
+    <value>This Windows printer crops PostNL labels automatically and sends them to the configured destination printer.</value>
   </data>
   <data name="MainTargetPrinter.Text" xml:space="preserve">
-    <value>De doelprinter wordt tijdens de installatie gekozen.</value>
+    <value>The destination printer is selected during installation.</value>
   </data>
   <data name="MainBackground.Text" xml:space="preserve">
-    <value>De printer werkt op de achtergrond; dit venster hoeft niet open te blijven.</value>
+    <value>The printer runs in the background; this window does not need to remain open.</value>
   </data>
 </root>

@@ -8,7 +8,7 @@
     <ProjectGuid>{CE2D559C-F312-4075-A6E8-3888B46D644A}</ProjectGuid>
     <TargetPlatformVersion>10.0.26100.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.26100.0</TargetPlatformMinVersion>
-    <DefaultLanguage>nl-NL</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
     <PackageCertificateThumbprint>FF644BAD53DE2FF0D2CFA1D0ED87EA111BE91352</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
@@ -21,7 +21,7 @@
     <SelfContained>false</SelfContained>
     <PublishSelfContained>false</PublishSelfContained>
     <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
-    <EntryPointProjectUniqueName>..\src\PostNL10x15.Worker\PostNL10x15.Worker.csproj</EntryPointProjectUniqueName>
+    <EntryPointProjectUniqueName>..\src\PostNL10x15.VirtualEndpoint\PostNL10x15.VirtualEndpoint.csproj</EntryPointProjectUniqueName>
     <WapProjPath Condition="'$(WapProjPath)'==''">$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\</WapProjPath>
   </PropertyGroup>
 
@@ -52,7 +52,10 @@
       <Link>PostNL10x15.Worker\PostNL10x15.VirtualPrinter.winmd</Link>
     </Content>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" PrivateAssets="all" />
-    <ProjectReference Include="..\src\PostNL10x15.Worker\PostNL10x15.Worker.csproj" />
+    <ProjectReference Include="..\src\PostNL10x15.VirtualEndpoint\PostNL10x15.VirtualEndpoint.csproj" />
+    <ProjectReference Include="..\src\PostNL10x15.Worker\PostNL10x15.Worker.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />

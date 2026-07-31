@@ -33,6 +33,47 @@ function Test-DesktopRuntime {
         Select-Object -First 1)
 }
 
+function Install-AppxDependencyIfNeeded {
+    param(
+        [string]$Name,
+        [version]$MinimumVersion,
+        [string]$FileName
+    )
+
+    $installedDependency = Get-AppxPackage `
+        -Name $Name `
+        -ErrorAction SilentlyContinue |
+        Where-Object { $_.Architecture -in "X64", "Neutral" } |
+        Sort-Object Version -Descending |
+        Select-Object -First 1
+    if ($installedDependency -and
+        [version]$installedDependency.Version -ge $MinimumVersion) {
+        return
+    }
+
+    $dependencyPath = Join-Path `
+        $projectRoot `
+        "AppPackages\Dependencies\x64\$FileName"
+    if (-not (Test-Path -LiteralPath $dependencyPath)) {
+        throw "Het meegeleverde Windows-onderdeel '$FileName' ontbreekt."
+    }
+
+    Add-AppxPackage `
+        -Path $dependencyPath `
+        -ForceApplicationShutdown
+
+    $installedDependency = Get-AppxPackage `
+        -Name $Name `
+        -ErrorAction SilentlyContinue |
+        Where-Object { $_.Architecture -in "X64", "Neutral" } |
+        Sort-Object Version -Descending |
+        Select-Object -First 1
+    if (-not $installedDependency -or
+        [version]$installedDependency.Version -lt $MinimumVersion) {
+        throw "Het vereiste Windows-onderdeel '$Name' is niet geïnstalleerd."
+    }
+}
+
 try {
     if (-not (Test-DesktopRuntime)) {
         $runtimeInstaller = Get-ChildItem `
@@ -108,6 +149,19 @@ try {
     finally {
         $certificate.Dispose()
     }
+
+    Install-AppxDependencyIfNeeded `
+        -Name "Microsoft.VCLibs.140.00" `
+        -MinimumVersion "14.0.33519.0" `
+        -FileName "Microsoft.VCLibs.x64.14.00.appx"
+    Install-AppxDependencyIfNeeded `
+        -Name "Microsoft.NET.CoreRuntime.2.2" `
+        -MinimumVersion "2.2.31331.1" `
+        -FileName "Microsoft.NET.CoreRuntime.2.2.appx"
+    Install-AppxDependencyIfNeeded `
+        -Name "Microsoft.NET.CoreFramework.Debug.2.2" `
+        -MinimumVersion "2.2.31327.1" `
+        -FileName "Microsoft.NET.CoreFramework.Debug.2.2.appx"
 
     $installed = Get-AppxPackage `
         -Name $packageName `

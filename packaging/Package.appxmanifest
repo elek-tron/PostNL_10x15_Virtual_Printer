@@ -13,10 +13,10 @@
   <Identity
     Name="PostNL10x15.VirtualPrinter"
     Publisher="CN=PostNL10x15 Development"
-    Version="0.3.2.0" />
+    Version="0.3.4.0" />
 
   <Properties>
-    <DisplayName>PostNL 10x15 Virtual Printer v0.3.2</DisplayName>
+    <DisplayName>PostNL 10x15 Virtual Printer v0.3.4</DisplayName>
     <PublisherDisplayName>PostNL 10x15</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -33,17 +33,18 @@
   </Dependencies>
 
   <Resources>
+    <Resource Language="en-US" />
     <Resource Language="nl-NL" />
   </Resources>
 
   <Applications>
     <Application
       Id="App"
-      Executable="PostNL10x15.Worker\PostNL10x15.exe"
-      EntryPoint="Windows.FullTrustApplication"
+      Executable="PostNL10x15.VirtualEndpoint.exe"
+      EntryPoint="PostNL10x15.VirtualEndpoint.App"
       uap10:SupportsMultipleInstances="true">
       <uap:VisualElements
-        DisplayName="PostNL 10x15 v0.3.2"
+        DisplayName="PostNL 10x15 v0.3.4"
         Description="Automatische PostNL-labelprinter voor 100 x 150 mm."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
@@ -52,6 +53,10 @@
       </uap:VisualElements>
 
       <Extensions>
+        <printsupport:Extension
+          Category="windows.printSupportSettingsUI"
+          EntryPoint="PostNL10x15.VirtualEndpoint.App" />
+
         <printsupport:Extension
           Category="windows.printSupportExtension"
           EntryPoint="PostNL10x15.VirtualPrinter.PsaExtensionTask" />

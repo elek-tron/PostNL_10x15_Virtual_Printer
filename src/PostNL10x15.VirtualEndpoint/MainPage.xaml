@@ -5,23 +5,27 @@
     <Grid Padding="32">
         <StackPanel MaxWidth="640" HorizontalAlignment="Left">
             <TextBlock
+                x:Uid="MainTitle"
                 FontSize="28"
                 FontWeight="SemiBold"
                 Text="PostNL 10x15" />
             <TextBlock
+                x:Uid="MainDescription"
                 Margin="0,16,0,0"
                 FontSize="16"
                 TextWrapping="Wrap"
-                Text="Deze Windows-printer snijdt PostNL-labels automatisch uit en stuurt ze naar de ingestelde doelprinter." />
+                Text="This Windows printer crops PostNL labels automatically and sends them to the configured destination printer." />
             <TextBlock
+                x:Uid="MainTargetPrinter"
                 Margin="0,16,0,0"
                 FontSize="16"
                 FontWeight="SemiBold"
-                Text="De doelprinter wordt tijdens de installatie gekozen." />
+                Text="The destination printer is selected during installation." />
             <TextBlock
+                x:Uid="MainBackground"
                 Margin="0,8,0,0"
                 Foreground="DarkGreen"
-                Text="De printer werkt op de achtergrond; dit venster hoeft niet open te blijven." />
+                Text="The printer runs in the background; this window does not need to remain open." />
         </StackPanel>
     </Grid>
 </Page>

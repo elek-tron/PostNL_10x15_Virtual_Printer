@@ -20,6 +20,7 @@
       MaxVersionTested="10.0.26100.0" />
   </Dependencies>
   <Resources>
+    <Resource Language="en-US" />
     <Resource Language="nl-NL" />
   </Resources>
   <Applications>
@@ -54,4 +55,3 @@
     </Application>
   </Applications>
 </Package>
-

@@ -33,6 +33,7 @@
   </Dependencies>
 
   <Resources>
+    <Resource Language="en-US" />
     <Resource Language="nl-NL" />
   </Resources>
 

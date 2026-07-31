@@ -36,17 +36,22 @@ Alleen het laatste commando start een Windows-printopdracht.
   Windows-printer.
 - `PostNL10x15.VirtualPrinter`: ontvangt PDF, OXPS of PostScript van de
   Windows-afdrukroute en start de worker onzichtbaar.
-- `packaging/VirtualPrinter`: moderne Windows 11-printerconfiguratie met A4
-  als invoerformaat.
+- `packaging/VirtualPrinter`: moderne Windows 11-printerconfiguratie. De
+  interne A4-invoer blijft behouden voor een scherpe uitsnede, maar de
+  gebruiker ziet alleen de vaste uitvoer van 10 x 15 cm.
 
 ## Werking
 
 De virtuele printer `PostNL 10x15` is end-to-end getest met een echt
 PostNL-label. De A4-witruimte wordt zonder kalibratie verwijderd, waarna een
 PDF van exact 150 x 100 mm naar de gekozen printer gaat. De uiteindelijke
-testversie is 0.3.2. Deze versie gebruikt een herkenbaar label-met-schaar-icoon
+testversie is 0.3.4. Deze versie gebruikt een herkenbaar label-met-schaar-icoon
 dat ook in de kleine Windows-appweergave duidelijk zichtbaar blijft. Het
-versienummer staat expliciet in de zichtbare appnaam.
+versienummer staat expliciet in de zichtbare appnaam. De printereigenschappen
+tonen geen verwarrende lijst met papierformaten of portret/landschap meer:
+alleen 10 x 15 cm, automatische stand en automatische uitsnede.
+Op een Nederlandstalige Windows-installatie zijn deze teksten Nederlands.
+Bij iedere andere Windows-taal wordt automatisch Engels gebruikt.
 
 ## Zelfstandig pakket bouwen
 
@@ -61,7 +66,7 @@ worker wordt later onzichtbaar in het MSIX-printerpakket opgenomen.
 ## Virtuele printer installeren
 
 Gebruik voor een andere computer de complete map of ZIP
-`PostNL 10x15 Printer - Installatie Windows 11 v0.3.2`. Dubbelklik daarin op
+`PostNL 10x15 Printer - Installatie Windows 11 v0.3.4`. Dubbelklik daarin op
 `INSTALLEREN.cmd`, kies een bestaande doelprinter uit de lijst en kies daarna
 **Ja** bij de Windows-beheerdersvraag.
 Een printer met ongeveer 100 x 150 mm als standaard papierformaat staat
@@ -72,5 +77,5 @@ Daarna verschijnt `PostNL 10x15` in de Windows-printerlijst.
 
 Start dezelfde installer later opnieuw om de doelprinter van PDF24 naar de
 labelprinter te wijzigen of een nieuwere pakketversie te installeren. De
-meegeleverde .NET 8 Desktop Runtime wordt alleen geïnstalleerd wanneer die
-ontbreekt.
+meegeleverde .NET 8 Desktop Runtime en Windows-app-onderdelen worden alleen
+geïnstalleerd wanneer die ontbreken.
