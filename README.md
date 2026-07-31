@@ -6,6 +6,24 @@ geinstalleerde printer.
 
 De moderne virtuele printer vereist Windows 11 24H2 (build 26100) of nieuwer.
 
+## Systeemvereisten
+
+Voor installatie en normaal gebruik:
+
+- Windows 11 24H2 (build 26100) of nieuwer
+- een 64-bits Windows-computer
+- een reeds geïnstalleerde printer, bij voorkeur met ongeveer 100 x 150 mm
+  (4 x 6 inch) als standaard papierformaat
+- beheerdersrechten tijdens de installatie
+
+.NET 8 Desktop Runtime is niet standaard gegarandeerd aanwezig in Windows 11.
+De complete installer controleert dit automatisch en installeert de
+meegeleverde runtime en benodigde Windows-app-onderdelen alleen wanneer ze
+ontbreken. De gebruiker hoeft .NET dus niet afzonderlijk te downloaden.
+
+Voor het bouwen vanuit de broncode zijn daarnaast de .NET 8 SDK en Windows 11
+SDK 10.0.26100 nodig.
+
 ## Van A4 naar 10 x 15 cm
 
 | PostNL-label op A4 | Automatisch uitgesneden naar 10 x 15 cm |
