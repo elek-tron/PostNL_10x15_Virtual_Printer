@@ -6,6 +6,24 @@ geinstalleerde printer.
 
 De moderne virtuele printer vereist Windows 11 24H2 (build 26100) of nieuwer.
 
+## Van A4 naar 10 x 15 cm
+
+| PostNL-label op A4 | Automatisch uitgesneden naar 10 x 15 cm |
+| --- | --- |
+| ![PostNL-label op een A4-pagina](docs/images/voorbeeld-a4-geanonimiseerd.png) | ![Automatisch uitgesneden PostNL-label van 10 x 15 cm](docs/images/voorbeeld-10x15-geanonimiseerd.png) |
+
+De adressen, barcode en het zendingsnummer in deze voorbeelden zijn voor
+privacy onleesbaar gemaakt. Het programma gebruikt geen vaste uitsnede en
+hoeft niet te worden gekalibreerd.
+
+## Eenvoudige printerinstellingen
+
+![Vaste uitvoerinstellingen van de virtuele printer](docs/images/vaste-instellingen.png)
+
+De gebruiker hoeft geen papierformaat of afdrukstand te kiezen. De virtuele
+printer gebruikt altijd 10 x 15 cm, bepaalt de stand automatisch en verwijdert
+de witte A4-randen.
+
 ## Printers
 
 - Test: `PDF24`
@@ -82,3 +100,7 @@ Start dezelfde installer later opnieuw om de doelprinter van PDF24 naar de
 labelprinter te wijzigen of een nieuwere pakketversie te installeren. De
 meegeleverde .NET 8 Desktop Runtime en Windows-app-onderdelen worden alleen
 geïnstalleerd wanneer die ontbreken.
+
+## Licentie
+
+Dit project is beschikbaar onder de [MIT-licentie](LICENSE).
