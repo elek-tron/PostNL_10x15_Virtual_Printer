@@ -6,6 +6,14 @@ geinstalleerde printer.
 
 De moderne virtuele printer vereist Windows 11 24H2 (build 26100) of nieuwer.
 
+## Downloaden
+
+[**Download de nieuwste installatie**](https://github.com/elek-tron/PostNL_10x15_Virtual_Printer/releases/latest)
+
+Download op de releasepagina het ZIP-bestand dat begint met
+`PostNL-10x15-Printer-Windows-11`, pak het volledig uit en dubbelklik op
+`INSTALLEREN.cmd`.
+
 ## Systeemvereisten
 
 Voor installatie en normaal gebruik:
