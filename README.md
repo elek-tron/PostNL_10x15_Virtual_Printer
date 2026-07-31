@@ -1,8 +1,12 @@
 # PostNL 10x15 Virtual Printer
 
+[**Nederlands**](#nederlands) · [**English**](#english)
+
+## Nederlands
+
 Zelfstandig Windows 11-project om een PostNL A4-verzendlabel automatisch uit
 te snijden, naar exact 150 x 100 mm om te zetten en door te sturen naar een
-geinstalleerde printer.
+geïnstalleerde labelprinter.
 
 De moderne virtuele printer vereist Windows 11 24H2 (build 26100) of nieuwer.
 
@@ -60,6 +64,13 @@ De doelprinter wordt tijdens de installatie gekozen uit de bestaande
 Windows-printers. Een printer met ongeveer 100 x 150 mm (ook 4 x 6 inch)
 als standaard papierformaat wordt automatisch voorgeselecteerd, ongeacht merk
 of type. De keuze wordt voor de huidige gebruiker bewaard.
+
+<img src="docs/images/zebra-zd220-labelprinter.jpg"
+     alt="Zebra ZD220-labelprinter als voorbeeld"
+     width="640">
+
+*Voorbeeld: Zebra ZD220. Het programma werkt ook met labelprinters van andere
+merken die ongeveer 100 x 150 mm ondersteunen.*
 
 ## Veilige testvolgorde
 
@@ -136,3 +147,166 @@ Dit project is beschikbaar onder de [MIT-licentie](LICENSE).
 De broncode, installatiebestanden en documentatie in deze repository zijn
 volledig gemaakt met OpenAI Codex, gebaseerd op GPT-5. De projecteigenaar
 bepaalde de functionele wensen en voerde de praktijktests uit.
+
+## Merken
+
+Dit onafhankelijke project is niet verbonden aan of goedgekeurd door PostNL of
+Zebra Technologies. PostNL en Zebra zijn merken van hun respectieve
+eigenaren.
+
+---
+
+## English
+
+Standalone Windows 11 project that automatically crops a PostNL A4 shipping
+label, converts it to exactly 150 x 100 mm, and forwards it to an installed
+label printer.
+
+The modern virtual printer requires Windows 11 24H2 (build 26100) or newer.
+
+### Download
+
+[**Download the latest installer**](https://github.com/elek-tron/PostNL_10x15_Virtual_Printer/releases/latest)
+
+On the release page, download the ZIP file whose name starts with
+`PostNL-10x15-Printer-Windows-11`, extract it completely, and double-click
+`INSTALLEREN.cmd`.
+
+### System requirements
+
+For installation and normal use:
+
+- Windows 11 24H2 (build 26100) or newer
+- a 64-bit Windows computer
+- an existing printer, preferably configured with approximately 100 x 150 mm
+  (4 x 6 inch) as its default paper size
+- administrator rights during installation
+
+.NET 8 Desktop Runtime is not guaranteed to be included with Windows 11. The
+complete installer checks for it automatically and installs the bundled
+runtime and required Windows app components only when they are missing. The
+user does not have to download .NET separately.
+
+Building the project from source additionally requires the .NET 8 SDK and
+Windows 11 SDK 10.0.26100.
+
+### From A4 to 10 x 15 cm
+
+| PostNL label on A4 | Automatically cropped to 10 x 15 cm |
+| --- | --- |
+| ![PostNL label on an A4 page](docs/images/voorbeeld-a4-geanonimiseerd.png) | ![Automatically cropped 10 x 15 cm PostNL label](docs/images/voorbeeld-10x15-geanonimiseerd.png) |
+
+The addresses, barcode, and shipment number in these examples have been made
+unreadable for privacy. The program does not use a fixed crop and does not
+require calibration.
+
+### Simple printer settings
+
+![Fixed output settings of the virtual printer](docs/images/vaste-instellingen.png)
+
+The user does not have to select a paper size or orientation. The virtual
+printer always uses 10 x 15 cm, determines the orientation automatically, and
+removes the white A4 margins.
+
+### Printers
+
+- Testing: `PDF24`
+- In practice: any Windows label printer with approximately 100 x 150 mm as
+  its default paper size
+
+During installation, the destination printer is selected from the existing
+Windows printers. A printer configured with approximately 100 x 150 mm
+(also 4 x 6 inch) as its default paper size is automatically preselected,
+regardless of brand or model. The selection is stored for the current user.
+
+<img src="docs/images/zebra-zd220-labelprinter.jpg"
+     alt="Zebra ZD220 label printer as an example"
+     width="640">
+
+*Example: Zebra ZD220. The program also works with label printers from other
+brands that support approximately 100 x 150 mm.*
+
+### Safe testing sequence
+
+```powershell
+dotnet run --project src/PostNL10x15.Worker -- printers
+dotnet run --project src/PostNL10x15.Worker -- inspect "input.pdf"
+dotnet run --project src/PostNL10x15.Worker -- crop "input.pdf" "output\label-10x15.pdf"
+dotnet run --project src/PostNL10x15.Worker -- print "input.pdf" --printer "PDF24"
+```
+
+Only the final command starts a Windows print job.
+
+### Architecture
+
+- `PostNL10x15.Core`: detects the label boundary and creates a vector PDF of
+  exactly 150 x 100 mm without manual calibration.
+- `PostNL10x15.Worker`: renders at 8 dots/mm and prints to a selected Windows
+  printer.
+- `PostNL10x15.VirtualPrinter`: receives PDF, OXPS, or PostScript from the
+  Windows printing route and starts the worker invisibly.
+- `packaging/VirtualPrinter`: modern Windows 11 printer configuration. The
+  internal A4 input is retained for a sharp crop, while the user sees only
+  the fixed 10 x 15 cm output.
+
+### Operation
+
+The `PostNL 10x15` virtual printer has been tested end to end with a real
+PostNL label. The A4 white space is removed without calibration, after which
+a PDF of exactly 150 x 100 mm is sent to the selected printer. The current
+test version is 0.3.5.
+
+This version uses a recognizable label-and-scissors icon that remains clear
+in the small Windows app view. The version number is included in the visible
+app name. The printer properties no longer show a confusing list of paper
+sizes or portrait/landscape choices: only 10 x 15 cm, automatic orientation,
+and automatic cropping.
+
+The interface is shown in Dutch on a Dutch Windows installation and in English
+for every other Windows display language. After the first Windows print
+button, a clear preview of the cropped label is displayed. The job is sent to
+the selected label printer only after selecting **Print**; selecting
+**Cancel** prints nothing.
+
+### Building a self-contained package
+
+```powershell
+.\scripts\Publish-Worker.ps1
+```
+
+This creates `artifacts\worker-win-x64`. It contains the .NET runtime and PDF
+renderer, so the old PostNL program and Adobe Reader are not required. The
+worker is subsequently included invisibly in the MSIX printer package.
+
+### Installing the virtual printer
+
+For another computer, use the complete folder or ZIP archive
+`PostNL 10x15 Printer - Installatie Windows 11 v0.3.5`. Double-click
+`INSTALLEREN.cmd`, select an existing destination printer, and then select
+**Yes** when Windows asks for administrator permission.
+
+A printer configured with approximately 100 x 150 mm as its default paper
+size is selected automatically. If none is found, PDF24 is selected as the
+test destination when available. The local development certificate is used
+only to trust this self-built MSIX package on the computer. `PostNL 10x15`
+then appears in the Windows printer list.
+
+Run the same installer again later to change the destination from PDF24 to the
+label printer or to install a newer package version. The bundled .NET 8
+Desktop Runtime and Windows app components are installed only when missing.
+
+### License
+
+This project is available under the [MIT License](LICENSE).
+
+### Project creation
+
+The source code, installation files, and documentation in this repository
+were created entirely with OpenAI Codex, based on GPT-5. The project owner
+defined the functional requirements and performed the practical tests.
+
+### Trademarks
+
+This independent project is not affiliated with or endorsed by PostNL or
+Zebra Technologies. PostNL and Zebra are trademarks of their respective
+owners.
