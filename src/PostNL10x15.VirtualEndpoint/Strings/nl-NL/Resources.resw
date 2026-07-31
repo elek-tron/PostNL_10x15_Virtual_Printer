@@ -92,4 +92,25 @@
   <data name="MainBackground.Text" xml:space="preserve">
     <value>De printer werkt op de achtergrond; dit venster hoeft niet open te blijven.</value>
   </data>
+  <data name="PreviewTitle.Text" xml:space="preserve">
+    <value>Is dit label goed?</value>
+  </data>
+  <data name="PreviewExplanation.Text" xml:space="preserve">
+    <value>Het label wordt pas afgedrukt als je op Afdrukken klikt.</value>
+  </data>
+  <data name="PreviewLoading.Text" xml:space="preserve">
+    <value>Label voorbereiden...</value>
+  </data>
+  <data name="PreviewError.Text" xml:space="preserve">
+    <value>Het labelvoorbeeld kon niet worden getoond. Kies Annuleren en probeer het opnieuw.</value>
+  </data>
+  <data name="PreviewCancelButton.Content" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="PreviewPrintButton.Content" xml:space="preserve">
+    <value>Afdrukken</value>
+  </data>
+  <data name="PreviewPrinterFormat" xml:space="preserve">
+    <value>Printer: {0}</value>
+  </data>
 </root>

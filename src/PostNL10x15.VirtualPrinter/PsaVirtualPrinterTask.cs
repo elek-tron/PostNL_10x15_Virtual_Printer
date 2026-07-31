@@ -12,6 +12,8 @@ namespace PostNL10x15.VirtualPrinter;
 /// </summary>
 public sealed class PsaVirtualPrinterTask : IBackgroundTask
 {
+    private static readonly TimeSpan WorkerTimeout =
+        TimeSpan.FromSeconds(90);
     private BackgroundTaskDeferral? _taskDeferral;
 
     public PsaVirtualPrinterTask()
@@ -60,13 +62,14 @@ public sealed class PsaVirtualPrinterTask : IBackgroundTask
             EndpointLog.Write(
                 "Print data available: "
                 + args.SourceContent.ContentType);
-            string storedFormat = await StoreJobAsync(args);
+            StoredJob storedJob = await StoreJobAsync(args);
             EndpointLog.Write(
-                "Print job stored in inbox as " + storedFormat + ".");
-            await FullTrustProcessLauncher
-                .LaunchFullTrustProcessForCurrentAppAsync("ProcessInbox");
-            EndpointLog.Write("Worker launched.");
-            status = PrintWorkflowSubmittedStatus.Succeeded;
+                "Print job "
+                + storedJob.JobId
+                + " stored in inbox as "
+                + storedJob.Format
+                + ".");
+            status = await RunPreviewWorkflowAsync(args, storedJob);
         }
         catch (Exception exception)
         {
@@ -82,7 +85,195 @@ public sealed class PsaVirtualPrinterTask : IBackgroundTask
         }
     }
 
-    private static async Task<string> StoreJobAsync(
+    private static async Task<PrintWorkflowSubmittedStatus>
+        RunPreviewWorkflowAsync(
+            PrintWorkflowVirtualPrinterDataAvailableEventArgs args,
+            StoredJob storedJob)
+    {
+        string previewDirectory = Directory.CreateDirectory(
+            Path.Combine(
+                ApplicationData.Current.LocalFolder.Path,
+                "Preview")).FullName;
+        string activeJobPath = Path.Combine(
+            previewDirectory,
+            "active-job.txt");
+        string decisionPath = JobPath(
+            previewDirectory,
+            storedJob.JobId,
+            ".decision");
+
+        File.WriteAllText(activeJobPath, storedJob.JobId);
+        TryDelete(decisionPath);
+
+        try
+        {
+            await LaunchWorkerAsync(
+                "--prepare-preview " + storedJob.JobId);
+            await WaitForWorkerAsync(
+                previewDirectory,
+                storedJob.JobId,
+                ".ready");
+            EndpointLog.Write(
+                "Preview prepared for " + storedJob.JobId + ".");
+
+            bool printRequested;
+            if (args.UILauncher.IsUILaunchEnabled())
+            {
+                PrintWorkflowUICompletionStatus uiStatus =
+                    await args.UILauncher.LaunchAndCompleteUIAsync();
+                string decision = File.Exists(decisionPath)
+                    ? File.ReadAllText(decisionPath).Trim()
+                    : "cancel";
+                printRequested = string.Equals(
+                    decision,
+                    "print",
+                    StringComparison.OrdinalIgnoreCase);
+                EndpointLog.Write(
+                    "Preview UI completed with "
+                    + uiStatus
+                    + "; decision "
+                    + decision
+                    + ".");
+            }
+            else
+            {
+                // Afdrukken vanuit een niet-interactieve Windows-route blijft
+                // mogelijk wanneer Windows geen venster mag openen.
+                printRequested = true;
+                EndpointLog.Write(
+                    "Preview UI unavailable; printing automatically.");
+            }
+
+            if (!printRequested)
+            {
+                await LaunchWorkerAsync(
+                    "--cancel-preview " + storedJob.JobId);
+                await WaitForWorkerAsync(
+                    previewDirectory,
+                    storedJob.JobId,
+                    ".canceled");
+                CleanupPreviewFiles(
+                    previewDirectory,
+                    storedJob.JobId);
+                return PrintWorkflowSubmittedStatus.Canceled;
+            }
+
+            await LaunchWorkerAsync(
+                "--print-preview " + storedJob.JobId);
+            await WaitForWorkerAsync(
+                previewDirectory,
+                storedJob.JobId,
+                ".printed");
+            CleanupPreviewFiles(
+                previewDirectory,
+                storedJob.JobId);
+            EndpointLog.Write(
+                "Previewed label sent to target printer.");
+            return PrintWorkflowSubmittedStatus.Succeeded;
+        }
+        finally
+        {
+            try
+            {
+                if (File.Exists(activeJobPath)
+                    && string.Equals(
+                        File.ReadAllText(activeJobPath).Trim(),
+                        storedJob.JobId,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Delete(activeJobPath);
+                }
+            }
+            catch
+            {
+                // Een achtergebleven verwijzing wordt bij de volgende taak
+                // overschreven.
+            }
+        }
+    }
+
+    private static async Task LaunchWorkerAsync(string arguments)
+    {
+        await FullTrustProcessLauncher
+            .LaunchFullTrustProcessForCurrentAppWithArgumentsAsync(
+                arguments);
+        EndpointLog.Write("Worker launched: " + arguments);
+    }
+
+    private static async Task WaitForWorkerAsync(
+        string previewDirectory,
+        string jobId,
+        string successExtension)
+    {
+        string successPath = JobPath(
+            previewDirectory,
+            jobId,
+            successExtension);
+        string errorPath = JobPath(
+            previewDirectory,
+            jobId,
+            ".error.txt");
+        DateTime deadline = DateTime.UtcNow + WorkerTimeout;
+
+        do
+        {
+            if (File.Exists(errorPath))
+            {
+                throw new InvalidDataException(
+                    "Het label kon niet worden voorbereid of afgedrukt."
+                    + Environment.NewLine
+                    + File.ReadAllText(errorPath));
+            }
+
+            if (File.Exists(successPath))
+            {
+                return;
+            }
+
+            await Task.Delay(200);
+        }
+        while (DateTime.UtcNow < deadline);
+
+        throw new TimeoutException(
+            "Het voorbereiden of afdrukken van het label duurde te lang.");
+    }
+
+    private static string JobPath(
+        string previewDirectory,
+        string jobId,
+        string extension) =>
+        Path.Combine(previewDirectory, jobId + extension);
+
+    private static void CleanupPreviewFiles(
+        string previewDirectory,
+        string jobId)
+    {
+        foreach (string path in Directory.EnumerateFiles(
+                     previewDirectory,
+                     jobId + ".*",
+                     SearchOption.TopDirectoryOnly))
+        {
+            TryDelete(path);
+        }
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+        catch
+        {
+            // Tijdelijke voorbeeldbestanden mogen de afdrukstatus niet
+            // veranderen.
+        }
+    }
+
+    private static async Task<StoredJob> StoreJobAsync(
         PrintWorkflowVirtualPrinterDataAvailableEventArgs args)
     {
         StorageFolder inbox = await ApplicationData.Current.LocalFolder
@@ -155,7 +346,9 @@ public sealed class PsaVirtualPrinterTask : IBackgroundTask
             await temporaryFile.RenameAsync(
                 jobId + extension,
                 NameCollisionOption.FailIfExists);
-            return extension.TrimStart('.');
+            return new StoredJob(
+                jobId,
+                extension.TrimStart('.'));
         }
         catch
         {
@@ -164,6 +357,8 @@ public sealed class PsaVirtualPrinterTask : IBackgroundTask
             throw;
         }
     }
+
+    private sealed record StoredJob(string JobId, string Format);
 
     private static async Task WriteEndpointErrorAsync(Exception exception)
     {

@@ -92,4 +92,25 @@
   <data name="MainBackground.Text" xml:space="preserve">
     <value>The printer runs in the background; this window does not need to remain open.</value>
   </data>
+  <data name="PreviewTitle.Text" xml:space="preserve">
+    <value>Is this label correct?</value>
+  </data>
+  <data name="PreviewExplanation.Text" xml:space="preserve">
+    <value>The label is printed only after you select Print.</value>
+  </data>
+  <data name="PreviewLoading.Text" xml:space="preserve">
+    <value>Preparing the label...</value>
+  </data>
+  <data name="PreviewError.Text" xml:space="preserve">
+    <value>The label preview could not be shown. Select Cancel and try again.</value>
+  </data>
+  <data name="PreviewCancelButton.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="PreviewPrintButton.Content" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="PreviewPrinterFormat" xml:space="preserve">
+    <value>Printer: {0}</value>
+  </data>
 </root>

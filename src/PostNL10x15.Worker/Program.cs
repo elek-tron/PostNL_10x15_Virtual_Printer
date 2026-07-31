@@ -45,6 +45,11 @@ internal static class Program
             cropper,
             printer,
             postScriptConverter);
+        var previewJobProcessor = new PreviewJobProcessor(
+            cropper,
+            rasterizer,
+            printer,
+            postScriptConverter);
         AppSettings settings = AppSettings.Load();
 
         switch (args[0].ToLowerInvariant())
@@ -56,6 +61,30 @@ internal static class Program
             case "process-inbox":
             case "--process-inbox":
                 return inboxProcessor.Process(settings);
+
+            case "prepare-preview":
+            case "--prepare-preview":
+                RequireArgumentCount(
+                    args,
+                    2,
+                    "prepare-preview <afdruknummer>");
+                return previewJobProcessor.Prepare(args[1], settings);
+
+            case "print-preview":
+            case "--print-preview":
+                RequireArgumentCount(
+                    args,
+                    2,
+                    "print-preview <afdruknummer>");
+                return previewJobProcessor.Print(args[1], settings);
+
+            case "cancel-preview":
+            case "--cancel-preview":
+                RequireArgumentCount(
+                    args,
+                    2,
+                    "cancel-preview <afdruknummer>");
+                return previewJobProcessor.Cancel(args[1]);
 
             case "inspect":
                 RequireArgumentCount(args, 2, "inspect <invoer.pdf>");
@@ -270,6 +299,24 @@ internal static class Program
                     "--process-inbox",
                     StringComparison.OrdinalIgnoreCase)
                 || value.Equals(
+                    "prepare-preview",
+                    StringComparison.OrdinalIgnoreCase)
+                || value.Equals(
+                    "--prepare-preview",
+                    StringComparison.OrdinalIgnoreCase)
+                || value.Equals(
+                    "print-preview",
+                    StringComparison.OrdinalIgnoreCase)
+                || value.Equals(
+                    "--print-preview",
+                    StringComparison.OrdinalIgnoreCase)
+                || value.Equals(
+                    "cancel-preview",
+                    StringComparison.OrdinalIgnoreCase)
+                || value.Equals(
+                    "--cancel-preview",
+                    StringComparison.OrdinalIgnoreCase)
+                || value.Equals(
                     "inspect",
                     StringComparison.OrdinalIgnoreCase)
                 || value.Equals(
@@ -325,6 +372,9 @@ internal static class Program
         Console.WriteLine("Commando's:");
         Console.WriteLine("  printers");
         Console.WriteLine("  process-inbox");
+        Console.WriteLine("  prepare-preview <afdruknummer>");
+        Console.WriteLine("  print-preview <afdruknummer>");
+        Console.WriteLine("  cancel-preview <afdruknummer>");
         Console.WriteLine("  inspect <invoer.pdf>");
         Console.WriteLine("  crop <invoer.pdf> <uitvoer.pdf>");
         Console.WriteLine("  preview <invoer.pdf> <uitvoer.png>");
