@@ -122,3 +122,9 @@ geïnstalleerd wanneer die ontbreken.
 ## Licentie
 
 Dit project is beschikbaar onder de [MIT-licentie](LICENSE).
+
+## Totstandkoming
+
+De broncode, installatiebestanden en documentatie in deze repository zijn
+volledig gemaakt met OpenAI Codex, gebaseerd op GPT-5. De projecteigenaar
+bepaalde de functionele wensen en voerde de praktijktests uit.
